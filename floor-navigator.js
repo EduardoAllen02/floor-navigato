@@ -1,4 +1,4 @@
-/* floor-navigator.js v7 */
+/* floor-navigator.js v8 */
 (function() {
 
   function go(url) {
@@ -30,7 +30,7 @@
     var dlg = document.createElement('dialog');
     dlg.id = 'floorNavDialog';
 
-    /* Nav de pisos — top left */
+    /* Nav lateral izquierdo */
     var nav = document.createElement('div');
     nav.id = 'floorNavUI';
 
@@ -47,7 +47,7 @@
 
     dlg.appendChild(nav);
 
-    /* Home — bottom center, dentro del dialog */
+    /* Home — centro abajo */
     var homeBtn = document.createElement('button');
     homeBtn.className = 'fn-home';
     homeBtn.textContent = 'Home';
@@ -55,8 +55,9 @@
     dlg.appendChild(homeBtn);
 
     document.body.appendChild(dlg);
-    dlg.showModal();
-    dlg.addEventListener('cancel', function(e) { e.preventDefault(); });
+
+    /* show() en vez de showModal() — NO bloquea clicks del viewer */
+    dlg.show();
   }
 
   var tries = 0;
