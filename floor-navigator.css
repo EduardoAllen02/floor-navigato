@@ -1,93 +1,85 @@
-/* floor-navigator.css v6b */
+/* floor-navigator.js v6 - usa dialog top layer */
+(function() {
 
-#floorNavDialog {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  max-width: 100vw !important;
-  max-height: 100vh !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  background: transparent !important;
-  pointer-events: none !important;
-  overflow: visible !important;
-}
+  function go(url) {
+    try { window.top.location.href = url; } catch(e) {
+      window.location.href = url;
+    }
+  }
 
-#floorNavDialog::backdrop {
-  background: transparent !important;
-}
+  function build() {
+    if (document.getElementById('floorNavDialog')) return;
 
-/* Nav lateral — top left */
-#floorNavUI {
-  position: absolute !important;
-  top: 10px !important;
-  left: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 3px !important;
-  pointer-events: none !important;
-}
+    var cfg = document.getElementById('fn-cfg');
+    if (!cfg) return;
 
-.fn-btn {
-  display: block !important;
-  width: 48px !important;
-  height: clamp(26px, 5vh, 40px) !important;
-  border: none !important;
-  outline: none !important;
-  border-radius: 0 6px 6px 0 !important;
-  background: rgb(27, 114, 255) !important;
-  color: #fff !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: clamp(10px, 1.4vh, 14px) !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.5px !important;
-  cursor: pointer !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25) !important;
-  transition: background 0.15s, width 0.12s !important;
-  pointer-events: auto !important;
-  text-align: center !important;
-  padding: 0 !important;
-}
+    var current  = cfg.getAttribute('data-floor') || 'G';
+    var baseUrl  = cfg.getAttribute('data-base')  || '';
+    var homeUrl  = cfg.getAttribute('data-home')  || '#';
 
-.fn-btn:hover {
-  background: rgb(10, 90, 220) !important;
-  width: 56px !important;
-}
+    var FLOORS = [
+      { label: '6F', path: 'sap6' },
+      { label: '5F', path: 'sap5' },
+      { label: '4F', path: 'sap4' },
+      { label: '3F', path: 'sap3' },
+      { label: '2F', path: 'sap2' },
+      { label: '1F', path: 'sap1' },
+      { label: 'G',  path: 'sap0' }
+    ];
 
-.fn-btn.fn-active {
-  width: 56px !important;
-  outline: 2px solid rgba(255,255,255,0.8) !important;
-  outline-offset: -2px !important;
-  cursor: default !important;
-  pointer-events: none !important;
-}
+    var dlg = document.createElement('dialog');
+    dlg.id = 'floorNavDialog';
 
-/* Home — sacado del flujo del nav, centrado abajo */
-#floorNavHome {
-  position: absolute !important;
-  bottom: 24px !important;
-  left: 50vw !important;
-  transform: translateX(-50%) !important;
-  min-width: 90px !important;
-  height: 38px !important;
-  padding: 0 24px !important;
-  border: none !important;
-  border-radius: 6px !important;
-  background: rgb(27, 114, 255) !important;
-  color: #fff !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  cursor: pointer !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
-  transition: background 0.15s !important;
-  pointer-events: auto !important;
-  white-space: nowrap !important;
-}
+    var nav = document.createElement('div');
+    nav.id = 'floorNavUI';
 
-#floorNavHome:hover {
-  background: rgb(10, 90, 220) !important;
-}
+    FLOORS.forEach(function(floor) {
+      var isActive = floor.label === current;
+      var btn = document.createElement('button');
+      btn.className = isActive ? 'fn-btn fn-active' : 'fn-btn';
+      btn.textContent = floor.label;
+      btn.title = 'Piso ' + floor.label;
+      if (!isActive) {
+        btn.onclick = function(e) { e.preventDefault(); go(baseUrl + floor.path + '/'); };
+      }
+      nav.appendChild(btn);
+    });
+
+    var sep = document.createElement('div');
+    sep.className = 'fn-sep';
+    nav.appendChild(sep);
+
+    var home = document.createElement('button');
+    home.className = 'fn-home';
+    home.innerHTML = '&#8962;';
+    home.title = 'Página principal';
+    home.addEventListener('click', function(e) { e.preventDefault(); go(homeUrl); });
+    nav.appendChild(home);
+
+    dlg.appendChild(nav);
+
+    var lbl = document.createElement('div');
+    lbl.id = 'floorNavLabel';
+    lbl.textContent = 'Blue ' + current;
+    dlg.appendChild(lbl);
+
+    document.body.appendChild(dlg);
+    dlg.showModal();
+    dlg.addEventListener('cancel', function(e) { e.preventDefault(); });
+  }
+
+  var tries = 0;
+  function tryBuild() {
+    if (document.getElementById('floorNavDialog')) return;
+    build();
+    if (++tries < 12) setTimeout(tryBuild, 500);
+  }
+  tryBuild();
+
+  try {
+    new MutationObserver(function() {
+      if (!document.getElementById('floorNavDialog')) build();
+    }).observe(document.body, { childList: true });
+  } catch(e) {}
+
+})();
