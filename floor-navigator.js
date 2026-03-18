@@ -1,46 +1,46 @@
-/* floor-navigator.js v5 */
-(function() {
+(function () {
+  'use strict';
 
-  function go(url) {
-    /* El viewer puede correr dentro de un iframe — intentar navegar el top */
-    try { window.top.location.href = url; return; } catch(e) {}
-    try { window.parent.location.href = url; return; } catch(e) {}
-    window.location.href = url;
+  var FLOORS = [
+    { label: '6F', path: 'sap6' },
+    { label: '5F', path: 'sap5' },
+    { label: '4F', path: 'sap4' },
+    { label: '3F', path: 'sap3' },
+    { label: '2F', path: 'sap2' },
+    { label: '1F', path: 'sap1' },
+    { label: 'G',  path: 'sap0' }
+  ];
+
+  function navigate(url) {
+    try { window.top.location.href = url; } catch (e) { window.location.href = url; }
   }
 
-  function build() {
-    /* Evitar duplicados */
-    if (document.getElementById('floorNavUI')) return;
-
-    /* Leer config del HTML del pin */
+  function init() {
     var cfg = document.getElementById('fn-cfg');
     if (!cfg) return;
 
-    var current = cfg.getAttribute('data-floor') || 'G';
-    var baseUrl  = cfg.getAttribute('data-base')  || '';
-    var homeUrl  = cfg.getAttribute('data-home')  || '#';
+    var currentFloor = cfg.getAttribute('data-floor') || 'G';
+    var base         = cfg.getAttribute('data-base')  || '';
+    var homeUrl      = cfg.getAttribute('data-home')  || '';
 
-    var FLOORS = [
-      { label: '6F', path: 'sap6' },
-      { label: '5F', path: 'sap5' },
-      { label: '4F', path: 'sap4' },
-      { label: '3F', path: 'sap3' },
-      { label: '2F', path: 'sap2' },
-      { label: '1F', path: 'sap1' },
-      { label: 'G',  path: 'sap0' }
-    ];
+    // Remove any previous instance
+    var old = document.getElementById('fn-dialog');
+    if (old) { try { old.close(); } catch(e) {} old.remove(); }
 
-    /* Crear nav desde cero y meterlo en body — NO mover el del pin */
-    var nav = document.createElement('div');
-    nav.id = 'floorNavUI';
+    /* ── Build nav ── */
+    var nav = document.createElement('nav');
+    nav.id = 'fn-nav';
 
-    FLOORS.forEach(function(f) {
-      var isActive = f.label === current;
+    FLOORS.forEach(function (floor) {
       var btn = document.createElement('button');
-      btn.className = isActive ? 'fn-btn fn-active' : 'fn-btn';
-      btn.textContent = f.label;
-      if (!isActive) {
-        btn.onclick = function() { go(baseUrl + f.path + '/'); };
+      btn.className = 'fn-btn' + (floor.label === currentFloor ? ' fn-active' : '');
+      btn.textContent = floor.label;
+      btn.title = 'Piso ' + floor.label;
+
+      if (floor.label !== currentFloor) {
+        btn.addEventListener('click', function () {
+          navigate(base + floor.path);
+        });
       }
       nav.appendChild(btn);
     });
@@ -49,37 +49,28 @@
     sep.className = 'fn-sep';
     nav.appendChild(sep);
 
-    var home = document.createElement('button');
-    home.className = 'fn-home';
-    home.innerHTML = '&#8962;';
-    home.title = 'Pagina principal';
-    home.onclick = function() { go(homeUrl); };
-    nav.appendChild(home);
+    var homeBtn = document.createElement('button');
+    homeBtn.className = 'fn-home';
+    homeBtn.innerHTML = '&#8962;';
+    homeBtn.title = 'Inicio';
+    homeBtn.addEventListener('click', function () { navigate(homeUrl); });
+    nav.appendChild(homeBtn);
 
-    var lbl = document.createElement('div');
-    lbl.id = 'floorNavLabel';
-    lbl.textContent = 'Blue ' + current;
+    /* ── Wrap in <dialog> → top layer, escapes any CSS transform ── */
+    var dialog = document.createElement('dialog');
+    dialog.id = 'fn-dialog';
+    dialog.appendChild(nav);
+    document.body.appendChild(dialog);
+    dialog.showModal();
 
-    /* Append al body del documento — fuera de cualquier popup del pin */
-    document.body.appendChild(nav);
-    document.body.appendChild(lbl);
+    // Backdrop click → do nothing (no close)
+    dialog.addEventListener('cancel', function (e) { e.preventDefault(); });
+    dialog.addEventListener('click',  function (e) { e.stopPropagation(); });
   }
 
-  /* Intentos progresivos — el fn-cfg puede no estar listo de inmediato */
-  var attempts = 0;
-  function tryBuild() {
-    if (document.getElementById('floorNavUI')) return;
-    build();
-    attempts++;
-    if (attempts < 10) setTimeout(tryBuild, 500);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
-  tryBuild();
-
-  /* Re-inyectar si React destruye el nav */
-  try {
-    new MutationObserver(function() {
-      if (!document.getElementById('floorNavUI')) build();
-    }).observe(document.body, { childList: true });
-  } catch(e) {}
-
 })();
