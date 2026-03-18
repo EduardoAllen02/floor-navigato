@@ -1,7 +1,8 @@
 /* ── Dialog shell ── escapa transforms del viewer */
 #fn-dialog {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 0;
   height: 0;
   padding: 0;
@@ -10,6 +11,8 @@
   background: transparent;
   overflow: visible;
   pointer-events: none;
+  max-width: none;
+  max-height: none;
 }
 
 #fn-dialog::backdrop {
