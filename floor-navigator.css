@@ -1,4 +1,5 @@
-/* Resetear el dialog — sin backdrop, sin bordes, transparente */
+/* floor-navigator.css v7 */
+
 #floorNavDialog {
   position: fixed !important;
   top: 0 !important;
@@ -13,7 +14,6 @@
   background: transparent !important;
   pointer-events: none !important;
   overflow: visible !important;
-  z-index: 2147483647 !important;
 }
 
 #floorNavDialog::backdrop {
@@ -21,90 +21,107 @@
   display: none !important;
 }
 
+/* Nav — esquina superior izquierda */
 #floorNavUI {
   position: fixed !important;
-  top: 50% !important;
+  top: 12px !important;
   left: 0 !important;
-  transform: translateY(-50%) !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 5px !important;
-  padding: 10px 0 !important;
+  gap: 4px !important;
+  padding: 0 !important;
   pointer-events: none !important;
 }
 
-#floorNavLabel {
-  position: fixed !important;
-  top: 16px !important;
-  left: 62px !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 22px !important;
-  font-weight: 800 !important;
-  color: rgb(27,114,255) !important;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.5) !important;
-  pointer-events: none !important;
-}
-
+/* Botones de piso */
 .fn-btn {
   display: block !important;
-  width: 52px !important;
-  height: 40px !important;
+  width: 48px !important;
+  height: 36px !important;
   border: none !important;
   outline: none !important;
-  border-radius: 0 8px 8px 0 !important;
-  background: rgba(0,0,0,0.52) !important;
+  border-radius: 0 6px 6px 0 !important;
+  background: rgb(27, 114, 255) !important;
   color: #fff !important;
   font-family: 'Segoe UI', Arial, sans-serif !important;
   font-size: 13px !important;
   font-weight: 700 !important;
   letter-spacing: 0.5px !important;
   cursor: pointer !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.4) !important;
-  border-left: 2px solid transparent !important;
-  transition: background 0.15s, transform 0.12s !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25) !important;
+  border-left: none !important;
+  transition: background 0.15s, transform 0.12s, width 0.12s !important;
   pointer-events: auto !important;
+  text-align: center !important;
 }
 
 .fn-btn:hover {
-  background: rgba(27,114,255,0.85) !important;
-  transform: translateX(5px) !important;
-  border-left: 2px solid rgba(255,255,255,0.6) !important;
+  background: rgb(10, 90, 220) !important;
+  width: 54px !important;
 }
 
+/* Piso activo: más brillante y un poco más ancho */
 .fn-btn.fn-active {
-  background: rgb(27,114,255) !important;
-  border-left: 2px solid rgba(255,255,255,0.9) !important;
-  transform: translateX(3px) !important;
+  background: rgb(27, 114, 255) !important;
+  width: 54px !important;
+  border-radius: 0 6px 6px 0 !important;
+  box-shadow: 0 2px 12px rgba(27,114,255,0.5) !important;
   cursor: default !important;
   pointer-events: none !important;
+  outline: 2px solid rgba(255,255,255,0.7) !important;
+  outline-offset: -2px !important;
 }
 
-.fn-sep {
-  height: 1px !important;
-  background: rgba(255,255,255,0.2) !important;
-  margin: 2px 8px 2px 0 !important;
-  pointer-events: none !important;
+.fn-btn.fn-active:hover {
+  width: 54px !important;
 }
 
+/* Botón Home — centrado abajo */
 .fn-home {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 52px !important;
-  height: 40px !important;
+  min-width: 90px !important;
+  height: 38px !important;
+  padding: 0 20px !important;
   border: none !important;
-  border-radius: 0 8px 8px 0 !important;
-  background: rgba(0,0,0,0.52) !important;
+  border-radius: 6px !important;
+  background: rgb(27, 114, 255) !important;
   color: #fff !important;
-  font-size: 18px !important;
+  font-family: 'Segoe UI', Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
   cursor: pointer !important;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.4) !important;
-  border-left: 2px solid transparent !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
   transition: background 0.15s, transform 0.12s !important;
   pointer-events: auto !important;
+  letter-spacing: 0.3px !important;
 }
 
 .fn-home:hover {
-  background: rgba(0,0,0,0.75) !important;
-  transform: translateX(5px) !important;
+  background: rgb(10, 90, 220) !important;
+  transform: translateX(-50%) translateY(-2px) !important;
+}
+
+/* Responsivo — pantallas pequeñas */
+@media (max-width: 600px) {
+  .fn-btn {
+    width: 40px !important;
+    height: 32px !important;
+    font-size: 11px !important;
+  }
+  .fn-btn.fn-active,
+  .fn-btn:hover {
+    width: 46px !important;
+  }
+  .fn-home {
+    min-width: 76px !important;
+    height: 34px !important;
+    font-size: 13px !important;
+    bottom: 16px !important;
+  }
 }
