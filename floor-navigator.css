@@ -1,5 +1,6 @@
-/* floor-navigator.css v7 */
+/* floor-navigator.css v8 */
 
+/* Dialog cubre todo el viewport pero NO intercepta clicks */
 #floorNavDialog {
   position: fixed !important;
   top: 0 !important;
@@ -14,14 +15,10 @@
   background: transparent !important;
   pointer-events: none !important;
   overflow: visible !important;
+  z-index: 2147483647 !important;
 }
 
-#floorNavDialog::backdrop {
-  background: transparent !important;
-  display: none !important;
-}
-
-/* Nav — esquina superior izquierda */
+/* Nav lateral — top left, no mueve el 3D */
 #floorNavUI {
   position: fixed !important;
   top: 12px !important;
@@ -29,11 +26,9 @@
   display: flex !important;
   flex-direction: column !important;
   gap: 4px !important;
-  padding: 0 !important;
   pointer-events: none !important;
 }
 
-/* Botones de piso */
 .fn-btn {
   display: block !important;
   width: 48px !important;
@@ -49,8 +44,7 @@
   letter-spacing: 0.5px !important;
   cursor: pointer !important;
   box-shadow: 0 2px 8px rgba(0,0,0,0.25) !important;
-  border-left: none !important;
-  transition: background 0.15s, transform 0.12s, width 0.12s !important;
+  transition: background 0.15s, width 0.12s !important;
   pointer-events: auto !important;
   text-align: center !important;
 }
@@ -60,34 +54,23 @@
   width: 54px !important;
 }
 
-/* Piso activo: más brillante y un poco más ancho */
 .fn-btn.fn-active {
-  background: rgb(27, 114, 255) !important;
   width: 54px !important;
-  border-radius: 0 6px 6px 0 !important;
-  box-shadow: 0 2px 12px rgba(27,114,255,0.5) !important;
+  outline: 2px solid rgba(255,255,255,0.8) !important;
+  outline-offset: -2px !important;
   cursor: default !important;
   pointer-events: none !important;
-  outline: 2px solid rgba(255,255,255,0.7) !important;
-  outline-offset: -2px !important;
 }
 
-.fn-btn.fn-active:hover {
-  width: 54px !important;
-}
-
-/* Botón Home — centrado abajo */
+/* Home — centro abajo */
 .fn-home {
   position: fixed !important;
   bottom: 24px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
   min-width: 90px !important;
   height: 38px !important;
-  padding: 0 20px !important;
+  padding: 0 24px !important;
   border: none !important;
   border-radius: 6px !important;
   background: rgb(27, 114, 255) !important;
@@ -97,31 +80,21 @@
   font-weight: 700 !important;
   cursor: pointer !important;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
-  transition: background 0.15s, transform 0.12s !important;
+  transition: background 0.15s !important;
   pointer-events: auto !important;
   letter-spacing: 0.3px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .fn-home:hover {
   background: rgb(10, 90, 220) !important;
-  transform: translateX(-50%) translateY(-2px) !important;
 }
 
-/* Responsivo — pantallas pequeñas */
+/* Responsivo */
 @media (max-width: 600px) {
-  .fn-btn {
-    width: 40px !important;
-    height: 32px !important;
-    font-size: 11px !important;
-  }
-  .fn-btn.fn-active,
-  .fn-btn:hover {
-    width: 46px !important;
-  }
-  .fn-home {
-    min-width: 76px !important;
-    height: 34px !important;
-    font-size: 13px !important;
-    bottom: 16px !important;
-  }
+  .fn-btn { width: 40px !important; height: 30px !important; font-size: 11px !important; }
+  .fn-btn:hover, .fn-btn.fn-active { width: 46px !important; }
+  .fn-home { min-width: 76px !important; height: 34px !important; font-size: 13px !important; bottom: 16px !important; }
 }
