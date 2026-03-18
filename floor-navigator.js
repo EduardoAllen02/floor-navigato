@@ -1,4 +1,4 @@
-/* floor-navigator.js v10 */
+/* floor-navigator.js v6b - showModal + home en nav */
 (function() {
 
   function go(url) {
@@ -30,7 +30,6 @@
     var dlg = document.createElement('dialog');
     dlg.id = 'floorNavDialog';
 
-    /* Nav lateral izquierdo — position absolute dentro del dialog */
     var nav = document.createElement('div');
     nav.id = 'floorNavUI';
 
@@ -45,17 +44,16 @@
       nav.appendChild(btn);
     });
 
-    dlg.appendChild(nav);
-
-    /* Home — absolute dentro del dialog, centrado abajo */
     var homeBtn = document.createElement('button');
     homeBtn.id = 'floorNavHome';
     homeBtn.textContent = 'Home';
     homeBtn.onclick = function(e) { e.preventDefault(); go(homeUrl); };
-    dlg.appendChild(homeBtn);
+    nav.appendChild(homeBtn);
 
+    dlg.appendChild(nav);
     document.body.appendChild(dlg);
-    dlg.show();
+    dlg.showModal();
+    dlg.addEventListener('cancel', function(e) { e.preventDefault(); });
   }
 
   var tries = 0;
