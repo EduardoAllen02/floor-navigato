@@ -1,4 +1,4 @@
-/* floor-navigator.js v6 - usa dialog top layer */
+/* floor-navigator.js v7 */
 (function() {
 
   function go(url) {
@@ -27,11 +27,10 @@
       { label: 'G',  path: 'sap0' }
     ];
 
-    /* Crear dialog — se renderiza en top layer, escapa cualquier transform */
     var dlg = document.createElement('dialog');
     dlg.id = 'floorNavDialog';
 
-    /* Nav dentro del dialog */
+    /* Nav de pisos — top left */
     var nav = document.createElement('div');
     nav.id = 'floorNavUI';
 
@@ -46,30 +45,17 @@
       nav.appendChild(btn);
     });
 
-    var sep = document.createElement('div');
-    sep.className = 'fn-sep';
-    nav.appendChild(sep);
-
-    var homeBtn = document.createElement('button');
-    homeBtn.className = 'fn-home';
-    homeBtn.innerHTML = '&#8962;';
-    homeBtn.onclick = function(e) { e.preventDefault(); go(homeUrl); };
-    nav.appendChild(homeBtn);
-
     dlg.appendChild(nav);
 
-    /* Label */
-    var lbl = document.createElement('div');
-    lbl.id = 'floorNavLabel';
-    lbl.textContent = 'Blue ' + current;
-    dlg.appendChild(lbl);
+    /* Home — bottom center, dentro del dialog */
+    var homeBtn = document.createElement('button');
+    homeBtn.className = 'fn-home';
+    homeBtn.textContent = 'Home';
+    homeBtn.onclick = function(e) { e.preventDefault(); go(homeUrl); };
+    dlg.appendChild(homeBtn);
 
     document.body.appendChild(dlg);
-
-    /* showModal() → top layer, por encima de todo */
     dlg.showModal();
-
-    /* Evitar que Esc cierre el dialog */
     dlg.addEventListener('cancel', function(e) { e.preventDefault(); });
   }
 
