@@ -1,6 +1,5 @@
-/* floor-navigator.css v8 */
+/* floor-navigator.css v9 */
 
-/* Dialog cubre todo el viewport pero NO intercepta clicks */
 #floorNavDialog {
   position: fixed !important;
   top: 0 !important;
@@ -15,31 +14,31 @@
   background: transparent !important;
   pointer-events: none !important;
   overflow: visible !important;
-  z-index: 2147483647 !important;
+  z-index: 2147483646 !important;
 }
 
-/* Nav lateral — top left, no mueve el 3D */
 #floorNavUI {
   position: fixed !important;
-  top: 12px !important;
+  top: 10px !important;
   left: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
+  gap: 3px !important;
   pointer-events: none !important;
 }
 
+/* Botones responsivos en altura — se achican si la pantalla es baja */
 .fn-btn {
   display: block !important;
   width: 48px !important;
-  height: 36px !important;
+  height: clamp(28px, 5.5vh, 40px) !important;
   border: none !important;
   outline: none !important;
   border-radius: 0 6px 6px 0 !important;
   background: rgb(27, 114, 255) !important;
   color: #fff !important;
   font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 13px !important;
+  font-size: clamp(10px, 1.5vh, 14px) !important;
   font-weight: 700 !important;
   letter-spacing: 0.5px !important;
   cursor: pointer !important;
@@ -47,27 +46,29 @@
   transition: background 0.15s, width 0.12s !important;
   pointer-events: auto !important;
   text-align: center !important;
+  padding: 0 !important;
 }
 
 .fn-btn:hover {
   background: rgb(10, 90, 220) !important;
-  width: 54px !important;
+  width: 56px !important;
 }
 
 .fn-btn.fn-active {
-  width: 54px !important;
+  width: 56px !important;
   outline: 2px solid rgba(255,255,255,0.8) !important;
   outline-offset: -2px !important;
   cursor: default !important;
   pointer-events: none !important;
 }
 
-/* Home — centro abajo */
-.fn-home {
+/* Home — fixed en body directamente */
+#floorNavHome {
   position: fixed !important;
   bottom: 24px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
+  z-index: 2147483647 !important;
   min-width: 90px !important;
   height: 38px !important;
   padding: 0 24px !important;
@@ -82,19 +83,11 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
   transition: background 0.15s !important;
   pointer-events: auto !important;
-  letter-spacing: 0.3px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
 
-.fn-home:hover {
+#floorNavHome:hover {
   background: rgb(10, 90, 220) !important;
-}
-
-/* Responsivo */
-@media (max-width: 600px) {
-  .fn-btn { width: 40px !important; height: 30px !important; font-size: 11px !important; }
-  .fn-btn:hover, .fn-btn.fn-active { width: 46px !important; }
-  .fn-home { min-width: 76px !important; height: 34px !important; font-size: 13px !important; bottom: 16px !important; }
 }
