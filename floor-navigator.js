@@ -1,4 +1,4 @@
-/* floor-navigator.js v9 */
+/* floor-navigator.js v10 */
 (function() {
 
   function go(url) {
@@ -27,10 +27,10 @@
       { label: 'G',  path: 'sap0' }
     ];
 
-    /* Dialog para el nav lateral — escapa transforms del viewer */
     var dlg = document.createElement('dialog');
     dlg.id = 'floorNavDialog';
 
+    /* Nav lateral izquierdo — position absolute dentro del dialog */
     var nav = document.createElement('div');
     nav.id = 'floorNavUI';
 
@@ -46,16 +46,16 @@
     });
 
     dlg.appendChild(nav);
-    document.body.appendChild(dlg);
-    dlg.show();
 
-    /* Home — directo en body, fuera del dialog */
+    /* Home — absolute dentro del dialog, centrado abajo */
     var homeBtn = document.createElement('button');
     homeBtn.id = 'floorNavHome';
-    homeBtn.className = 'fn-home';
     homeBtn.textContent = 'Home';
     homeBtn.onclick = function(e) { e.preventDefault(); go(homeUrl); };
-    document.body.appendChild(homeBtn);
+    dlg.appendChild(homeBtn);
+
+    document.body.appendChild(dlg);
+    dlg.show();
   }
 
   var tries = 0;
@@ -68,12 +68,7 @@
 
   try {
     new MutationObserver(function() {
-      if (!document.getElementById('floorNavDialog')) {
-        /* Limpiar home huérfano si existe */
-        var old = document.getElementById('floorNavHome');
-        if (old) old.parentNode.removeChild(old);
-        build();
-      }
+      if (!document.getElementById('floorNavDialog')) build();
     }).observe(document.body, { childList: true });
   } catch(e) {}
 
