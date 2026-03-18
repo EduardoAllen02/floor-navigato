@@ -12,22 +12,22 @@
   ];
 
   function navigate(url) {
-    try { window.top.location.href = url; } catch (e) { window.location.href = url; }
+    try { window.top.location.href = url; }
+    catch (e) { window.location.href = url; }
   }
 
-  function init() {
-    var cfg = document.getElementById('fn-cfg');
-    if (!cfg) return;
-
+  function setup(cfg) {
     var currentFloor = cfg.getAttribute('data-floor') || 'G';
-    var base         = cfg.getAttribute('data-base')  || '';
+    var base         = (cfg.getAttribute('data-base')  || '').replace(/\/$/, '') + '/';
     var homeUrl      = cfg.getAttribute('data-home')  || '';
 
-    // Remove any previous instance
-    var old = document.getElementById('fn-dialog');
-    if (old) { try { old.close(); } catch(e) {} old.remove(); }
+    /* Limpia instancias previas */
+    ['fn-nav', 'fn-dialog'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) { try { el.close(); } catch (e) {} el.remove(); }
+    });
 
-    /* ── Build nav ── */
+    /* ── Construye el nav ── */
     var nav = document.createElement('nav');
     nav.id = 'fn-nav';
 
@@ -36,9 +36,9 @@
       btn.className = 'fn-btn' + (floor.label === currentFloor ? ' fn-active' : '');
       btn.textContent = floor.label;
       btn.title = 'Piso ' + floor.label;
-
       if (floor.label !== currentFloor) {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
           navigate(base + floor.path);
         });
       }
@@ -53,24 +53,48 @@
     homeBtn.className = 'fn-home';
     homeBtn.innerHTML = '&#8962;';
     homeBtn.title = 'Inicio';
-    homeBtn.addEventListener('click', function () { navigate(homeUrl); });
+    homeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      navigate(homeUrl);
+    });
     nav.appendChild(homeBtn);
 
-    /* ── Wrap in <dialog> → top layer, escapes any CSS transform ── */
-    var dialog = document.createElement('dialog');
-    dialog.id = 'fn-dialog';
-    dialog.appendChild(nav);
-    document.body.appendChild(dialog);
-    dialog.showModal();
+    /* ── Monta usando <dialog> si está disponible ── */
+    if (window.HTMLDialogElement) {
+      var dialog = document.createElement('dialog');
+      dialog.id = 'fn-dialog';
+      dialog.appendChild(nav);
+      document.body.appendChild(dialog);
+      try {
+        dialog.showModal();
+        dialog.addEventListener('cancel', function (e) { e.preventDefault(); });
+      } catch (err) {
+        dialog.setAttribute('open', '');
+      }
+    } else {
+      document.body.appendChild(nav);
+    }
 
-    // Backdrop click → do nothing (no close)
-    dialog.addEventListener('cancel', function (e) { e.preventDefault(); });
-    dialog.addEventListener('click',  function (e) { e.stopPropagation(); });
+    console.log('[FloorNav] montado en piso:', currentFloor);
+  }
+
+  function tryInit(attempts) {
+    attempts = attempts || 0;
+    var cfg = document.getElementById('fn-cfg');
+    if (cfg) {
+      setup(cfg);
+      return;
+    }
+    if (attempts < 30) {
+      setTimeout(function () { tryInit(attempts + 1); }, 200);
+    } else {
+      console.warn('[FloorNav] fn-cfg no encontrado tras 6s');
+    }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', function () { tryInit(); });
   } else {
-    init();
+    tryInit();
   }
 })();
