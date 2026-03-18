@@ -1,18 +1,18 @@
-/* floor-navigator.js v6 - usa dialog top layer */
+/* floor-navigator.js v5 */
 (function() {
 
   function go(url) {
-    try { window.top.location.href = url; } catch(e) {
-      window.location.href = url;
-    }
-
+    /* El viewer puede correr dentro de un iframe — intentar navegar el top */
+    try { window.top.location.href = url; return; } catch(e) {}
+    try { window.parent.location.href = url; return; } catch(e) {}
+    window.location.href = url;
   }
 
   function build() {
-    if (document.getElementById('floorNavDialog')) return;
+    /* Evitar duplicados */
+    if (document.getElementById('floorNavUI')) return;
 
-
-
+    /* Leer config del HTML del pin */
     var cfg = document.getElementById('fn-cfg');
     if (!cfg) return;
 
@@ -30,62 +30,56 @@
       { label: 'G',  path: 'sap0' }
     ];
 
-    /* Crear dialog — se renderiza en top layer, escapa cualquier transform */
-    var dlg = document.createElement('dialog');
-    dlg.id = 'floorNavDialog';
-
-    /* Nav dentro del dialog */
+    /* Crear nav desde cero y meterlo en body — NO mover el del pin */
     var nav = document.createElement('div');
     nav.id = 'floorNavUI';
 
+    FLOORS.forEach(function(f) {
+      var isActive = f.label === current;
+      var btn = document.createElement('button');
       btn.className = isActive ? 'fn-btn fn-active' : 'fn-btn';
       btn.textContent = f.label;
       if (!isActive) {
-        btn.onclick = function(e) { e.preventDefault(); go(baseUrl + f.path + '/'); };
+        btn.onclick = function() { go(baseUrl + f.path + '/'); };
       }
       nav.appendChild(btn);
     });
 
+    var sep = document.createElement('div');
     sep.className = 'fn-sep';
     nav.appendChild(sep);
 
-    var homeBtn = document.createElement('button');
-    homeBtn.className = 'fn-home';
-    homeBtn.innerHTML = '&#8962;';
-    homeBtn.onclick = function(e) { e.preventDefault(); go(homeUrl); };
-    nav.appendChild(homeBtn);
+    var home = document.createElement('button');
+    home.className = 'fn-home';
+    home.innerHTML = '&#8962;';
+    home.title = 'Pagina principal';
+    home.onclick = function() { go(homeUrl); };
+    nav.appendChild(home);
 
-    dlg.appendChild(nav);
-
-    /* Label */
     var lbl = document.createElement('div');
     lbl.id = 'floorNavLabel';
     lbl.textContent = 'Blue ' + current;
-    dlg.appendChild(lbl);
 
-    document.body.appendChild(dlg);
-
-    /* showModal() → top layer, por encima de todo */
-    dlg.showModal();
-
-    /* Evitar que Esc cierre el dialog */
-    dlg.addEventListener('cancel', function(e) { e.preventDefault(); });
-
+    /* Append al body del documento — fuera de cualquier popup del pin */
+    document.body.appendChild(nav);
+    document.body.appendChild(lbl);
   }
 
-  var tries = 0;
-
+  /* Intentos progresivos — el fn-cfg puede no estar listo de inmediato */
+  var attempts = 0;
   function tryBuild() {
-    if (document.getElementById('floorNavDialog')) return;
+    if (document.getElementById('floorNavUI')) return;
     build();
-    if (++tries < 12) setTimeout(tryBuild, 500);
-
+    attempts++;
+    if (attempts < 10) setTimeout(tryBuild, 500);
   }
   tryBuild();
 
-
+  /* Re-inyectar si React destruye el nav */
   try {
     new MutationObserver(function() {
-      if (!document.getElementById('floorNavDialog')) build();
+      if (!document.getElementById('floorNavUI')) build();
     }).observe(document.body, { childList: true });
   } catch(e) {}
+
+})();
