@@ -1,6 +1,5 @@
-/* floor-navigator.css v10 */
+/* floor-navigator.css v6b */
 
-/* Dialog: cubre todo el viewport, NO intercepta clicks */
 #floorNavDialog {
   position: fixed !important;
   top: 0 !important;
@@ -15,15 +14,13 @@
   background: transparent !important;
   pointer-events: none !important;
   overflow: visible !important;
-  z-index: 2147483647 !important;
 }
 
 #floorNavDialog::backdrop {
-  display: none !important;
   background: transparent !important;
 }
 
-/* Nav: absolute top-left dentro del dialog */
+/* Nav lateral — top left */
 #floorNavUI {
   position: absolute !important;
   top: 10px !important;
@@ -68,11 +65,11 @@
   pointer-events: none !important;
 }
 
-/* Home: absolute bottom-center dentro del dialog */
+/* Home — sacado del flujo del nav, centrado abajo */
 #floorNavHome {
   position: absolute !important;
   bottom: 24px !important;
-  left: 50% !important;
+  left: 50vw !important;
   transform: translateX(-50%) !important;
   min-width: 90px !important;
   height: 38px !important;
@@ -88,9 +85,6 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
   transition: background 0.15s !important;
   pointer-events: auto !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
   white-space: nowrap !important;
 }
 
