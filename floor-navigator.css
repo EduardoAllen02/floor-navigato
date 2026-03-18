@@ -1,5 +1,6 @@
-/* floor-navigator.css v9 */
+/* floor-navigator.css v10 */
 
+/* Dialog: cubre todo el viewport, NO intercepta clicks */
 #floorNavDialog {
   position: fixed !important;
   top: 0 !important;
@@ -14,11 +15,17 @@
   background: transparent !important;
   pointer-events: none !important;
   overflow: visible !important;
-  z-index: 2147483646 !important;
+  z-index: 2147483647 !important;
 }
 
+#floorNavDialog::backdrop {
+  display: none !important;
+  background: transparent !important;
+}
+
+/* Nav: absolute top-left dentro del dialog */
 #floorNavUI {
-  position: fixed !important;
+  position: absolute !important;
   top: 10px !important;
   left: 0 !important;
   display: flex !important;
@@ -27,18 +34,17 @@
   pointer-events: none !important;
 }
 
-/* Botones responsivos en altura — se achican si la pantalla es baja */
 .fn-btn {
   display: block !important;
   width: 48px !important;
-  height: clamp(28px, 5.5vh, 40px) !important;
+  height: clamp(26px, 5vh, 40px) !important;
   border: none !important;
   outline: none !important;
   border-radius: 0 6px 6px 0 !important;
   background: rgb(27, 114, 255) !important;
   color: #fff !important;
   font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: clamp(10px, 1.5vh, 14px) !important;
+  font-size: clamp(10px, 1.4vh, 14px) !important;
   font-weight: 700 !important;
   letter-spacing: 0.5px !important;
   cursor: pointer !important;
@@ -62,13 +68,12 @@
   pointer-events: none !important;
 }
 
-/* Home — fixed en body directamente */
+/* Home: absolute bottom-center dentro del dialog */
 #floorNavHome {
-  position: fixed !important;
+  position: absolute !important;
   bottom: 24px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  z-index: 2147483647 !important;
   min-width: 90px !important;
   height: 38px !important;
   padding: 0 24px !important;
@@ -86,6 +91,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  white-space: nowrap !important;
 }
 
 #floorNavHome:hover {
