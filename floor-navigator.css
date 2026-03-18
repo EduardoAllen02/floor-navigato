@@ -1,5 +1,4 @@
-/* floor-navigator.css v6 */
-
+/* Resetear el dialog — sin backdrop, sin bordes, transparente */
 #floorNavDialog {
   position: fixed !important;
   top: 0 !important;
@@ -32,6 +31,7 @@
   gap: 5px !important;
   padding: 10px 0 !important;
   pointer-events: none !important;
+
 }
 
 #floorNavLabel {
@@ -44,6 +44,7 @@
   color: rgb(27,114,255) !important;
   text-shadow: 0 1px 8px rgba(0,0,0,0.5) !important;
   pointer-events: none !important;
+
 }
 
 .fn-btn {
@@ -70,6 +71,7 @@
   background: rgba(27,114,255,0.85) !important;
   transform: translateX(5px) !important;
   border-left: 2px solid rgba(255,255,255,0.6) !important;
+
 }
 
 .fn-btn.fn-active {
@@ -103,6 +105,7 @@
   border-left: 2px solid transparent !important;
   transition: background 0.15s, transform 0.12s !important;
   pointer-events: auto !important;
+
 }
 
 .fn-home:hover {
