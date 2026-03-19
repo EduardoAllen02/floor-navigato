@@ -9,8 +9,8 @@
     { l: 'G',  p: 'sap0' }
   ];
 
-  var BASE = 'https://TUDOMINIO.com/';   
-  var HOME = 'https://TU-LANDING.com/'; 
+  var BASE = 'https://TUDOMINIO.com/';   // ← cambia esto
+  var HOME = 'https://TU-LANDING.com/';  // ← cambia esto
 
   var BLUE = '#1B91FF';
   var C = {
@@ -19,7 +19,7 @@
     hover:  { bg: '#fff', color: BLUE    }
   };
 
-  var open = false; // empieza oculto / starts hidden
+  var open = true; // empieza visible
 
   function go(u) {
     try { window.top.location.href = u; } catch (e) { window.location.href = u; }
@@ -200,7 +200,18 @@
     root.innerHTML = '';
     root.appendChild(toggleBtn);
     root.appendChild(sepTop);
-    floorEls.forEach(function (el) { root.appendChild(el); });
+    floorEls.forEach(function (el) {
+      if (!open) {
+        el.style.setProperty('display',         'none',  'important');
+        el.style.setProperty('pointer-events',  'none',  'important');
+      }
+      root.appendChild(el);
+    });
+    // Separador y home también ocultos si empieza cerrado
+    if (!open) {
+      sepTop.style.setProperty('opacity', '0', 'important');
+      sepBot.style.setProperty('opacity', '0', 'important');
+    }
     root.appendChild(sepBot);
     root.appendChild(homeBtn);
 
