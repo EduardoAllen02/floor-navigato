@@ -8,10 +8,11 @@
     { l: '1F', p: 'sap1' },
     { l: 'G',  p: 'sap0' }
   ];
+
   var C = {
-    normal:      { bg: '#0FCFFF', color: '#fff' },
-    active:      { bg: '#fff',    color: '#0FCFFF' },
-    hover:       { bg: '#fff',    color: '#0FCFFF' }
+    normal:      { bg: '#89D1FF', color: '#fff' },
+    active:      { bg: '#fff',    color: '#89D1FF' },
+    hover:       { bg: '#fff',    color: '#89D1FF' }
   };
 
   function go(u) {
@@ -38,6 +39,8 @@
     bs.setProperty('background',      active ? C.active.bg    : C.normal.bg,    'important');
     bs.setProperty('color',           active ? C.active.color : C.normal.color, 'important');
     bs.setProperty('transform',       'translateX(0)',                 'important');
+    bs.setProperty('opacity',         '1',                             'important');
+    bs.setProperty('filter',          'none',                          'important');
   }
 
   function addHover(btn) {
