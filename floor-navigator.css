@@ -1,93 +1,14 @@
-/* ── Dialog shell ── escapa transforms del viewer */
-#fn-dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: transparent;
-  overflow: visible;
-  pointer-events: none;
-  max-width: none;
-  max-height: none;
+/* floor-navigator.css — solo estilos de soporte, lo crítico va inline en JS */
+
+#fn-root * {
+  box-sizing: border-box !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
 }
 
-#fn-dialog::backdrop {
-  display: none;
-  background: transparent;
-}
-
-/* ── Nav panel ── fijo al viewport, izquierda centrado */
-#fn-nav {
-  position: fixed;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 10px 0;
-  pointer-events: all;
-  z-index: 99999;
-}
-
-/* ── Botones de piso ── */
-.fn-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 38px;
-  background: rgba(42, 36, 28, 0.88);
-  color: #e8e0d4;
-  border: none;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 700;
-  font-family: sans-serif;
-  letter-spacing: 0.03em;
-  cursor: pointer;
-  transition: background 0.18s;
-}
-
-.fn-btn:hover {
-  background: rgba(70, 58, 44, 0.95);
-}
-
-.fn-btn.fn-active {
-  background: #2b6ccf;
-  color: #fff;
-  cursor: default;
-}
-
-/* ── Separador ── */
-.fn-sep {
-  width: 28px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.18);
-  margin: 2px 0;
-}
-
-/* ── Botón Home ── */
-.fn-home {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 38px;
-  background: rgba(42, 36, 28, 0.88);
-  color: #e8e0d4;
-  border: none;
-  border-radius: 5px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background 0.18s;
-}
-
-.fn-home:hover {
-  background: rgba(70, 58, 44, 0.95);
+#fn-root button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  outline: none !important;
 }
