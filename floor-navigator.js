@@ -9,6 +9,9 @@
     { l: 'G',  p: 'sap0' }
   ];
 
+  var BASE = 'https://TUDOMINIO.com/';   
+  var HOME = 'https://TU-LANDING.com/'; 
+
   var BLUE = '#1B91FF';
   var C = {
     normal: { bg: BLUE,   color: '#fff'  },
@@ -138,8 +141,8 @@
 
   function setup(cfg) {
     var cur  = cfg.getAttribute('data-floor') || 'G';
-    var base = (cfg.getAttribute('data-base') || '').replace(/\/$/, '') + '/';
-    var home = cfg.getAttribute('data-home') || '';
+    var base = BASE.replace(/\/$/, '') + '/';
+    var home = HOME;
 
     var targetDoc, targetBody;
     try { targetDoc = window.top.document; targetBody = window.top.document.body; }
