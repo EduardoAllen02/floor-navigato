@@ -8,7 +8,6 @@
     { l: '1F', p: 'sap1' },
     { l: 'G',  p: 'sap0' }
   ];
-
   var C = {
     normal:      { bg: '#89D1FF', color: '#fff' },
     active:      { bg: '#fff',    color: '#89D1FF' },
