@@ -19,7 +19,7 @@
     hover:  { bg: '#fff', color: BLUE    }
   };
 
-  var open = true; // empieza visible
+  var open = false; // empieza visible
 
   function go(u) {
     try { window.top.location.href = u; } catch (e) { window.location.href = u; }
