@@ -10,7 +10,7 @@
   ];
 
   var C = {
-    normal:      { bg: '#0FCFFF', color: '#0FCFFF' },
+    normal:      { bg: '#0FCFFF', color: '#fff' },
     active:      { bg: '#fff',    color: '#0FCFFF' },
     hover:       { bg: '#fff',    color: '#0FCFFF' }
   };
