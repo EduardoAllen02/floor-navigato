@@ -9,8 +9,49 @@
     { l: 'G',  p: 'sap0' }
   ];
 
+  var C = {
+    normal:      { bg: '#89D1FF', color: '#fff' },
+    active:      { bg: '#fff',    color: '#89D1FF' },
+    hover:       { bg: '#fff',    color: '#89D1FF' }
+  };
+
   function go(u) {
     try { window.top.location.href = u; } catch (e) { window.location.href = u; }
+  }
+
+  function applyBaseBtn(b, active) {
+    var bs = b.style;
+    bs.setProperty('display',         'flex',                         'important');
+    bs.setProperty('align-items',     'center',                       'important');
+    bs.setProperty('justify-content', 'center',                       'important');
+    bs.setProperty('width',           '42px',                         'important');
+    bs.setProperty('height',          '38px',                         'important');
+    bs.setProperty('border',          'none',                         'important');
+    bs.setProperty('border-radius',   '5px',                          'important');
+    bs.setProperty('font-size',       '12px',                         'important');
+    bs.setProperty('font-weight',     '700',                          'important');
+    bs.setProperty('font-family',     'sans-serif',                   'important');
+    bs.setProperty('box-sizing',      'border-box',                   'important');
+    bs.setProperty('margin',          '0',                            'important');
+    bs.setProperty('padding',         '0',                            'important');
+    bs.setProperty('transition',      'background 0.18s, color 0.18s, transform 0.15s', 'important');
+    bs.setProperty('cursor',          active ? 'default' : 'pointer', 'important');
+    bs.setProperty('background',      active ? C.active.bg    : C.normal.bg,    'important');
+    bs.setProperty('color',           active ? C.active.color : C.normal.color, 'important');
+    bs.setProperty('transform',       'translateX(0)',                 'important');
+  }
+
+  function addHover(btn) {
+    btn.addEventListener('mouseenter', function () {
+      btn.style.setProperty('background', C.hover.bg,    'important');
+      btn.style.setProperty('color',      C.hover.color, 'important');
+      btn.style.setProperty('transform',  'translateX(4px)', 'important');
+    });
+    btn.addEventListener('mouseleave', function () {
+      btn.style.setProperty('background', C.normal.bg,    'important');
+      btn.style.setProperty('color',      C.normal.color, 'important');
+      btn.style.setProperty('transform',  'translateX(0)', 'important');
+    });
   }
 
   function setup(cfg) {
@@ -23,46 +64,26 @@
 
     var root = document.createElement('div');
     root.id = 'fn-root';
-
-    var s = root.style;
-    s.setProperty('position',       'fixed',               'important');
-    s.setProperty('top',            '50%',                 'important');
-    s.setProperty('left',           '0',                   'important');
-    s.setProperty('transform',      'translateY(-50%)',    'important');
-    s.setProperty('display',        'flex',                'important');
-    s.setProperty('flex-direction', 'column',              'important');
-    s.setProperty('align-items',    'center',              'important');
-    s.setProperty('gap',            '5px',                 'important');
-    s.setProperty('padding',        '10px 6px',            'important');
-    s.setProperty('z-index',        '2147483647',          'important');
-    s.setProperty('pointer-events', 'auto',                'important');
-
-    function makeBtn(label, active) {
-      var b = document.createElement('button');
-      b.textContent = label;
-      var bs = b.style;
-      bs.setProperty('display',          'flex',                        'important');
-      bs.setProperty('align-items',      'center',                      'important');
-      bs.setProperty('justify-content',  'center',                      'important');
-      bs.setProperty('width',            '42px',                        'important');
-      bs.setProperty('height',           '38px',                        'important');
-      bs.setProperty('background',       active ? '#2b6ccf' : 'rgba(42,36,28,0.88)', 'important');
-      bs.setProperty('color',            active ? '#fff' : '#e8e0d4',  'important');
-      bs.setProperty('border',           'none',                        'important');
-      bs.setProperty('border-radius',    '5px',                         'important');
-      bs.setProperty('font-size',        '12px',                        'important');
-      bs.setProperty('font-weight',      '700',                         'important');
-      bs.setProperty('font-family',      'sans-serif',                  'important');
-      bs.setProperty('cursor',           active ? 'default' : 'pointer','important');
-      bs.setProperty('box-sizing',       'border-box',                  'important');
-      bs.setProperty('margin',           '0',                           'important');
-      bs.setProperty('padding',          '0',                           'important');
-      return b;
-    }
+    var rs = root.style;
+    rs.setProperty('position',       'fixed',            'important');
+    rs.setProperty('top',            '50%',              'important');
+    rs.setProperty('left',           '0',                'important');
+    rs.setProperty('transform',      'translateY(-50%)', 'important');
+    rs.setProperty('display',        'flex',             'important');
+    rs.setProperty('flex-direction', 'column',           'important');
+    rs.setProperty('align-items',    'center',           'important');
+    rs.setProperty('gap',            '5px',              'important');
+    rs.setProperty('padding',        '10px 6px',         'important');
+    rs.setProperty('z-index',        '2147483647',       'important');
+    rs.setProperty('pointer-events', 'auto',             'important');
 
     FLOORS.forEach(function (f) {
-      var btn = makeBtn(f.l, f.l === cur);
-      if (f.l !== cur) {
+      var isActive = f.l === cur;
+      var btn = document.createElement('button');
+      btn.textContent = f.l;
+      applyBaseBtn(btn, isActive);
+      if (!isActive) {
+        addHover(btn);
         btn.addEventListener('click', function (e) {
           e.stopPropagation();
           go(base + f.p);
@@ -72,14 +93,17 @@
     });
 
     var sep = document.createElement('div');
-    sep.style.setProperty('width',      '28px',                    'important');
-    sep.style.setProperty('height',     '1px',                     'important');
-    sep.style.setProperty('background', 'rgba(255,255,255,0.2)',   'important');
-    sep.style.setProperty('margin',     '2px 0',                   'important');
+    sep.style.setProperty('width',      '28px',                  'important');
+    sep.style.setProperty('height',     '1px',                   'important');
+    sep.style.setProperty('background', 'rgba(255,255,255,0.4)', 'important');
+    sep.style.setProperty('margin',     '2px 0',                 'important');
     root.appendChild(sep);
 
-    var hb = makeBtn('\u2302', false);
+    var hb = document.createElement('button');
+    hb.innerHTML = '\u2302';
+    applyBaseBtn(hb, false);
     hb.style.setProperty('font-size', '20px', 'important');
+    addHover(hb);
     hb.addEventListener('click', function (e) {
       e.stopPropagation();
       go(home);
