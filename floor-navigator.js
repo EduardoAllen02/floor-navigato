@@ -9,8 +9,8 @@
     { l: 'G',  p: 'sap0' }
   ];
 
-  var BASE = 'https://TUDOMINIO.com/';   // ← cambia esto
-  var HOME = 'https://TU-LANDING.com/';  // ← cambia esto
+  var BASE = 'https://TUDOMINIO.com/';  
+  var HOME = 'https://TU-LANDING.com/';  
 
   var BLUE = '#1B91FF';
   var C = {
