@@ -10,9 +10,9 @@
   ];
 
   var C = {
-    normal:      { bg: '#0FCFFF', color: '#fff' },
-    active:      { bg: '#fff',    color: '#0FCFFF' },
-    hover:       { bg: '#fff',    color: '#0FCFFF' }
+    normal:      { bg: '#1B91FF', color: '#fff' },
+    active:      { bg: '#fff',    color: '#1B91FF' },
+    hover:       { bg: '#fff',    color: '#1B91FF' }
   };
 
   function go(u) {
