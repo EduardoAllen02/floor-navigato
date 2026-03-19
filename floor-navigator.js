@@ -123,7 +123,7 @@
       setTimeout(function () {
         el.style.setProperty('display', 'flex', 'important');
         var anim = showing ? 'fnIn' : 'fnOut';
-        el.style.setProperty('animation', anim+' 0.35s cubic-bezier(0.34,1.56,0.64,1) both', 'important');
+        el.style.setProperty('animation', anim+' 0.18s cubic-bezier(0.25,0.46,0.45,0.94) both', 'important');
 
         el.addEventListener('animationend', function handler() {
           el.removeEventListener('animationend', handler);
@@ -132,7 +132,7 @@
           done++;
           if (done === total && cb) cb();
         });
-      }, i * 55);
+      }, i * 22);
     });
   }
 
@@ -211,7 +211,7 @@
 
       // Anima el icono del toggle
       var iconAnim = open ? 'fnToggleOpen' : 'fnToggleClose';
-      toggleBtn.style.setProperty('animation', iconAnim+' 0.5s cubic-bezier(0.34,1.56,0.64,1) both', 'important');
+      toggleBtn.style.setProperty('animation', iconAnim+' 0.3s cubic-bezier(0.25,0.46,0.45,0.94) both', 'important');
       toggleBtn.innerHTML = open ? '&#9776;' : '&#9776;';
 
       // Anima pisos
