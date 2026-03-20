@@ -1,11 +1,13 @@
 !function () {
 
   /* ─── CONFIGURACIÓN ───────────────────────────────────── */
-  var BASE      = 'https://TUDOMINIO.com/';          // ← URL base de los tours
-  var HOME_URL  = 'https://TU-LANDING.com/';         // ← URL del landing
-  var IMG_BASE  = 'https://eduardoallen02.github.io/floor-navigato/pngs/'; // ← GitHub Pages
-  var TOP_DESKTOP = '38%';   // ← posición vertical desktop
-  var TOP_MOBILE  = '45%';   // 
+  var BASE             = 'https://TUDOMINIO.com/';
+  var HOME_URL         = 'https://TU-LANDING.com/';
+  var IMG_BASE         = 'https://eduardoallen02.github.io/floor-navigato/pngs/';
+  var BRIGHTNESS_HOVER = 1.3;   // ← brillo al hover (1.0 = normal, 1.3 = 30% más brillante)
+  var NAV_TOP_VH       = 4;     // ← desde donde empieza la nav (% del viewport)
+  var NAV_BOTTOM_VH    = 63;    // ← hasta donde llega la nav (% del viewport, antes del minimapa)
+  var LEFT_PX          = 8;     // ← distancia al borde izquierdo en px
   /* ──────────────────────────────────────────────────────── */
 
   var FLOORS = [
@@ -18,55 +20,72 @@
     { l: 'GF', p: 'sap0', img: 'GF_Q.png' }
   ];
 
-  function isMobile() {
-    // Combina ancho de pantalla Y detección táctil para máxima fiabilidad
-    return window.matchMedia('(max-width: 768px)').matches ||
-           ('ontouchstart' in window && window.innerWidth < 1024);
-  }
+  // 8 imgs + 1 separador pequeño
+  var ITEM_COUNT    = FLOORS.length + 1; // 7 pisos + home
+  var SEP_RATIO     = 0.4;  // el separador vale 0.4 "items" de altura
+  var GAP_RATIO     = 0.15; // gap entre items = 15% del tamaño del botón
 
-  function getTopPos() {
-    return isMobile() ? TOP_MOBILE : TOP_DESKTOP;
-  }
-
-  function getImgSize() {
-    return isMobile() ? '52px' : '52px';
+  function calcSizes(winH) {
+    var availPx  = winH * (NAV_BOTTOM_VH - NAV_TOP_VH) / 100;
+    // availPx = ITEM_COUNT * size + (ITEM_COUNT - 1) * gap + SEP_RATIO * size
+    // gap = GAP_RATIO * size
+    // availPx = size * (ITEM_COUNT + SEP_RATIO + (ITEM_COUNT - 1) * GAP_RATIO)
+    var divisor  = ITEM_COUNT + SEP_RATIO + (ITEM_COUNT - 1) * GAP_RATIO;
+    var size     = Math.floor(availPx / divisor);
+    var gap      = Math.round(size * GAP_RATIO);
+    var sepH     = Math.round(size * SEP_RATIO);
+    // clamp: mínimo 28px, máximo 64px
+    size = Math.max(28, Math.min(64, size));
+    gap  = Math.max(3,  Math.min(10, gap));
+    return { size: size, gap: gap, sepH: sepH };
   }
 
   function go(u) {
     try { window.top.location.href = u; } catch (e) { window.location.href = u; }
   }
 
-  function injectStyles(doc) {
-    if (doc.getElementById('fn-styles')) return;
+  function injectStyles(doc, b) {
+    var existing = doc.getElementById('fn-styles');
+    if (existing) existing.remove();
     var s = doc.createElement('style');
     s.id = 'fn-styles';
     s.textContent =
       '#fn-root img {' +
         'display:block!important;' +
-        'border-radius:12px!important;' +
+        'border-radius:10px!important;' +
         'cursor:pointer!important;' +
-        'transition:transform 0.18s ease, filter 0.18s ease!important;' +
+        'transition:transform 0.18s ease, filter 0.18s ease, background 0.18s ease!important;' +
         'transform:scale(1)!important;' +
         'filter:brightness(1)!important;' +
         'opacity:1!important;' +
         'user-select:none!important;' +
         '-webkit-user-drag:none!important;' +
+        'box-sizing:border-box!important;' +
+        'flex-shrink:0!important;' +
       '}' +
       '#fn-root img:hover {' +
         'transform:scale(1.05)!important;' +
-        'filter:brightness(1.1)!important;' +
+        'filter:brightness('+b+')!important;' +
       '}' +
       '#fn-root img.fn-active {' +
         'cursor:default!important;' +
-        'box-shadow:0 0 0 2.5px #1B91FF!important;' +
+        'border-radius:10px!important;' +
+        'background:#fff!important;' +
+        'padding:3px!important;' +
+        'filter:brightness('+b+')!important;' +
+        'transform:scale(1)!important;' +
       '}';
     doc.head.appendChild(s);
   }
 
-  function applyImgSize(img, size) {
-    img.style.setProperty('width',  size, 'important');
-    img.style.setProperty('height', size, 'important');
+  function applySize(el, size) {
+    el.style.setProperty('width',  size + 'px', 'important');
+    el.style.setProperty('height', size + 'px', 'important');
   }
+
+  var allImgs = [];
+  var sepEl   = null;
+  var rootEl  = null;
 
   function setup(cfg) {
     var cur = cfg.getAttribute('data-floor') || 'GF';
@@ -77,53 +96,60 @@
 
     var old = targetBody.querySelector('#fn-root');
     if (old) old.remove();
+    allImgs = [];
 
-    injectStyles(targetDoc);
+    var winH = (function() {
+      try { return window.top.innerHeight; } catch(e) { return window.innerHeight; }
+    })();
 
-    var mobile  = isMobile();
-    var topPos  = getTopPos();
-    var imgSize = getImgSize();
+    var sz = calcSizes(winH);
+
+    injectStyles(targetDoc, BRIGHTNESS_HOVER);
 
     /* ── Contenedor raíz ── */
     var root = document.createElement('div');
-    root.id = 'fn-root';
-    var rs = root.style;
-    rs.setProperty('position',        'fixed',            'important');
-    rs.setProperty('top',             topPos,             'important');
-    rs.setProperty('left',            mobile ? '4px' : '8px', 'important');
-    rs.setProperty('transform',       'translateY(-50%)', 'important');
-    rs.setProperty('display',         'flex',             'important');
-    rs.setProperty('flex-direction',  'column',           'important');
-    rs.setProperty('align-items',     'center',           'important');
-    rs.setProperty('gap',             mobile ? '4px' : '6px', 'important');
-    rs.setProperty('z-index',         '2147483647',       'important');
-    rs.setProperty('pointer-events',  'auto',             'important');
+    root.id  = 'fn-root';
+    rootEl   = root;
+    var rs   = root.style;
+    rs.setProperty('position',       'fixed',                    'important');
+    rs.setProperty('top',            NAV_TOP_VH + 'vh',          'important');
+    rs.setProperty('left',           LEFT_PX + 'px',             'important');
+    rs.setProperty('display',        'flex',                     'important');
+    rs.setProperty('flex-direction', 'column',                   'important');
+    rs.setProperty('align-items',    'center',                   'important');
+    rs.setProperty('gap',            sz.gap + 'px',              'important');
+    rs.setProperty('z-index',        '2147483647',               'important');
+    rs.setProperty('pointer-events', 'auto',                     'important');
 
-    /* ── Home arriba ── */
+    /* ── Home ── */
     var homeImg = document.createElement('img');
-    homeImg.src = IMG_BASE + 'Home.png';
-    homeImg.alt = 'Home';
+    homeImg.src   = IMG_BASE + 'Home.png';
+    homeImg.alt   = 'Home';
     homeImg.title = 'Inicio';
-    applyImgSize(homeImg, imgSize);
+    applySize(homeImg, sz.size);
     homeImg.addEventListener('click', function (e) {
       e.stopPropagation();
       go(HOME_URL);
     });
     root.appendChild(homeImg);
+    allImgs.push(homeImg);
 
-    /* ── Separador con espacio ── */
+    /* ── Separador ── */
     var sep = document.createElement('div');
-    sep.style.setProperty('height', mobile ? '5px' : '8px', 'important');
+    sep.style.setProperty('height',     sz.sepH + 'px',           'important');
+    sep.style.setProperty('width',      '1px',                    'important');
+    sep.style.setProperty('flex-shrink','0',                      'important');
+    sepEl = sep;
     root.appendChild(sep);
 
-    /* ── Botones de piso ── */
+    /* ── Pisos ── */
     FLOORS.forEach(function (f) {
       var isActive = f.l === cur;
       var img = document.createElement('img');
-      img.src = IMG_BASE + f.img;
-      img.alt = f.l;
+      img.src   = IMG_BASE + f.img;
+      img.alt   = f.l;
       img.title = 'Piso ' + f.l;
-      applyImgSize(img, imgSize);
+      applySize(img, sz.size);
       if (isActive) img.classList.add('fn-active');
       if (!isActive) {
         img.addEventListener('click', function (e) {
@@ -132,34 +158,29 @@
         });
       }
       root.appendChild(img);
+      allImgs.push(img);
     });
 
     targetBody.appendChild(root);
-    console.log('[FloorNav] OK piso:', cur, '| mobile:', mobile);
+    console.log('[FloorNav] OK | piso:', cur, '| btnSize:', sz.size + 'px');
 
-    /* ── Reposicionar si cambia el tamaño de ventana (ej: rotar tablet) ── */
+    /* ── Resize: recalcula tamaños en tiempo real ── */
     var resizeTimer;
-    var handleResize = function () {
+    function onResize() {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(function () {
-        var newMobile  = isMobile();
-        var newTop     = newMobile ? TOP_MOBILE : TOP_DESKTOP;
-        var newSize    = newMobile ? '40px' : '52px';
-        var newLeft    = newMobile ? '4px' : '8px';
-        var newGap     = newMobile ? '4px' : '6px';
-        var newSepH    = newMobile ? '5px' : '8px';
-        root.style.setProperty('top',  newTop,  'important');
-        root.style.setProperty('left', newLeft, 'important');
-        root.style.setProperty('gap',  newGap,  'important');
-        sep.style.setProperty('height', newSepH, 'important');
-        root.querySelectorAll('img').forEach(function (img) {
-          img.style.setProperty('width',  newSize, 'important');
-          img.style.setProperty('height', newSize, 'important');
-        });
-      }, 150);
-    };
-    try { window.top.addEventListener('resize', handleResize); }
-    catch (e) { window.addEventListener('resize', handleResize); }
+        var h = (function() {
+          try { return window.top.innerHeight; } catch(e) { return window.innerHeight; }
+        })();
+        var ns = calcSizes(h);
+        root.style.setProperty('gap', ns.gap + 'px', 'important');
+        sep.style.setProperty('height', ns.sepH + 'px', 'important');
+        allImgs.forEach(function (img) { applySize(img, ns.size); });
+        console.log('[FloorNav] resize | btnSize:', ns.size + 'px');
+      }, 100);
+    }
+    try { window.top.addEventListener('resize', onResize); }
+    catch (e) { window.addEventListener('resize', onResize); }
   }
 
   function init(n) {
