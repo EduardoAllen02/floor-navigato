@@ -29,7 +29,7 @@
   }
 
   function getImgSize() {
-    return isMobile() ? '40px' : '52px';
+    return isMobile() ? '52px' : '52px';
   }
 
   function go(u) {
