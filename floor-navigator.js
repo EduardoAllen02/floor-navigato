@@ -22,8 +22,8 @@
 
   // 8 imgs + 1 separador pequeño
   var ITEM_COUNT    = FLOORS.length + 1; // 7 pisos + home
-  var SEP_RATIO     = 0.8;  // el separador vale 0.4 "items" de altura
-  var GAP_RATIO     = 0.5; // gap entre items = 15% del tamaño del botón
+  var SEP_RATIO     = 0.05;  // el separador vale 0.4 "items" de altura
+  var GAP_RATIO     = 0.1; // gap entre items = 15% del tamaño del botón
 
   function calcSizes(winH) {
     var availPx  = winH * (NAV_BOTTOM_VH - NAV_TOP_VH) / 100;
