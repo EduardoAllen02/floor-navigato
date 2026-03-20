@@ -4,7 +4,8 @@
   var BASE      = 'https://TUDOMINIO.com/';          // ← URL base de los tours
   var HOME_URL  = 'https://TU-LANDING.com/';         // ← URL del landing
   var IMG_BASE  = 'https://eduardoallen02.github.io/floor-navigato/pngs/'; // ← GitHub Pages
-  var TOP_POS   = '38%';   // ← posición vertical: 50% = centro exacto
+  var TOP_DESKTOP = '38%';   // ← posición vertical desktop
+  var TOP_MOBILE  = '55%';   // 
   /* ──────────────────────────────────────────────────────── */
 
   var FLOORS = [
@@ -17,6 +18,20 @@
     { l: 'GF', p: 'sap0', img: 'GF_Q.png' }
   ];
 
+  function isMobile() {
+    // Combina ancho de pantalla Y detección táctil para máxima fiabilidad
+    return window.matchMedia('(max-width: 768px)').matches ||
+           ('ontouchstart' in window && window.innerWidth < 1024);
+  }
+
+  function getTopPos() {
+    return isMobile() ? TOP_MOBILE : TOP_DESKTOP;
+  }
+
+  function getImgSize() {
+    return isMobile() ? '40px' : '52px';
+  }
+
   function go(u) {
     try { window.top.location.href = u; } catch (e) { window.location.href = u; }
   }
@@ -28,8 +43,6 @@
     s.textContent =
       '#fn-root img {' +
         'display:block!important;' +
-        'width:52px!important;' +
-        'height:52px!important;' +
         'border-radius:12px!important;' +
         'cursor:pointer!important;' +
         'transition:transform 0.18s ease, filter 0.18s ease!important;' +
@@ -50,6 +63,11 @@
     doc.head.appendChild(s);
   }
 
+  function applyImgSize(img, size) {
+    img.style.setProperty('width',  size, 'important');
+    img.style.setProperty('height', size, 'important');
+  }
+
   function setup(cfg) {
     var cur = cfg.getAttribute('data-floor') || 'GF';
 
@@ -62,18 +80,22 @@
 
     injectStyles(targetDoc);
 
+    var mobile  = isMobile();
+    var topPos  = getTopPos();
+    var imgSize = getImgSize();
+
     /* ── Contenedor raíz ── */
     var root = document.createElement('div');
     root.id = 'fn-root';
     var rs = root.style;
     rs.setProperty('position',        'fixed',            'important');
-    rs.setProperty('top',             TOP_POS,            'important');
-    rs.setProperty('left',            '8px',              'important');
+    rs.setProperty('top',             topPos,             'important');
+    rs.setProperty('left',            mobile ? '4px' : '8px', 'important');
     rs.setProperty('transform',       'translateY(-50%)', 'important');
     rs.setProperty('display',         'flex',             'important');
     rs.setProperty('flex-direction',  'column',           'important');
     rs.setProperty('align-items',     'center',           'important');
-    rs.setProperty('gap',             '6px',              'important');
+    rs.setProperty('gap',             mobile ? '4px' : '6px', 'important');
     rs.setProperty('z-index',         '2147483647',       'important');
     rs.setProperty('pointer-events',  'auto',             'important');
 
@@ -82,6 +104,7 @@
     homeImg.src = IMG_BASE + 'Home.png';
     homeImg.alt = 'Home';
     homeImg.title = 'Inicio';
+    applyImgSize(homeImg, imgSize);
     homeImg.addEventListener('click', function (e) {
       e.stopPropagation();
       go(HOME_URL);
@@ -90,7 +113,7 @@
 
     /* ── Separador con espacio ── */
     var sep = document.createElement('div');
-    sep.style.setProperty('height', '8px', 'important');
+    sep.style.setProperty('height', mobile ? '5px' : '8px', 'important');
     root.appendChild(sep);
 
     /* ── Botones de piso ── */
@@ -100,6 +123,7 @@
       img.src = IMG_BASE + f.img;
       img.alt = f.l;
       img.title = 'Piso ' + f.l;
+      applyImgSize(img, imgSize);
       if (isActive) img.classList.add('fn-active');
       if (!isActive) {
         img.addEventListener('click', function (e) {
@@ -111,7 +135,31 @@
     });
 
     targetBody.appendChild(root);
-    console.log('[FloorNav] OK piso:', cur);
+    console.log('[FloorNav] OK piso:', cur, '| mobile:', mobile);
+
+    /* ── Reposicionar si cambia el tamaño de ventana (ej: rotar tablet) ── */
+    var resizeTimer;
+    var handleResize = function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        var newMobile  = isMobile();
+        var newTop     = newMobile ? TOP_MOBILE : TOP_DESKTOP;
+        var newSize    = newMobile ? '40px' : '52px';
+        var newLeft    = newMobile ? '4px' : '8px';
+        var newGap     = newMobile ? '4px' : '6px';
+        var newSepH    = newMobile ? '5px' : '8px';
+        root.style.setProperty('top',  newTop,  'important');
+        root.style.setProperty('left', newLeft, 'important');
+        root.style.setProperty('gap',  newGap,  'important');
+        sep.style.setProperty('height', newSepH, 'important');
+        root.querySelectorAll('img').forEach(function (img) {
+          img.style.setProperty('width',  newSize, 'important');
+          img.style.setProperty('height', newSize, 'important');
+        });
+      }, 150);
+    };
+    try { window.top.addEventListener('resize', handleResize); }
+    catch (e) { window.addEventListener('resize', handleResize); }
   }
 
   function init(n) {
