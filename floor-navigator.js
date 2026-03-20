@@ -5,7 +5,7 @@
   var HOME_URL  = 'https://TU-LANDING.com/';         // ← URL del landing
   var IMG_BASE  = 'https://eduardoallen02.github.io/floor-navigato/pngs/'; // ← GitHub Pages
   var TOP_DESKTOP = '38%';   // ← posición vertical desktop
-  var TOP_MOBILE  = '55%';   // 
+  var TOP_MOBILE  = '45%';   // 
   /* ──────────────────────────────────────────────────────── */
 
   var FLOORS = [
