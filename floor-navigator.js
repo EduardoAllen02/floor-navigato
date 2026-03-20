@@ -5,8 +5,8 @@
   var HOME_URL         = 'https://TU-LANDING.com/';
   var IMG_BASE         = 'https://eduardoallen02.github.io/floor-navigato/pngs/';
   var BRIGHTNESS_HOVER = 1.3;   // ← brillo al hover (1.0 = normal, 1.3 = 30% más brillante)
-  var NAV_TOP_VH       = 10;     // ← desde donde empieza la nav (% del viewport)
-  var NAV_BOTTOM_VH    = 65;    // ← hasta donde llega la nav (% del viewport, antes del minimapa)
+  var NAV_TOP_VH       = 9;     // ← desde donde empieza la nav (% del viewport)
+  var NAV_BOTTOM_VH    = 70;    // ← hasta donde llega la nav (% del viewport, antes del minimapa)
   var LEFT_PX          = 8;     // ← distancia al borde izquierdo en px
   /* ──────────────────────────────────────────────────────── */
 
@@ -22,8 +22,8 @@
 
   // 8 imgs + 1 separador pequeño
   var ITEM_COUNT    = FLOORS.length + 1; // 7 pisos + home
-  var SEP_RATIO     = 0.1;  // el separador vale 0.4 "items" de altura
-  var GAP_RATIO     = 0.8; // gap entre items = 15% del tamaño del botón
+  var SEP_RATIO     = 0.8;  // el separador vale 0.4 "items" de altura
+  var GAP_RATIO     = 0.5; // gap entre items = 15% del tamaño del botón
 
   function calcSizes(winH) {
     var availPx  = winH * (NAV_BOTTOM_VH - NAV_TOP_VH) / 100;
