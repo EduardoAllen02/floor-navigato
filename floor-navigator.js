@@ -4,7 +4,7 @@
   var BASE      = 'https://TUDOMINIO.com/';          // ← URL base de los tours
   var HOME_URL  = 'https://TU-LANDING.com/';         // ← URL del landing
   var IMG_BASE  = 'https://eduardoallen02.github.io/floor-navigato/pngs/'; // PNGs
-  var OFFSET_Y  = '-60px';  // ← sube la navegación (más negativo = más arriba)
+  var OFFSET_Y  = '-90px';  // ← sube la navegación (más negativo = más arriba)
   /* ──────────────────────────────────────────────────────── */
 
   var FLOORS = [
