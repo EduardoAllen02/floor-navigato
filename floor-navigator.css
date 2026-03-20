@@ -1,13 +1,6 @@
-/* floor-navigator.css — solo estilos de soporte, lo crítico va inline en JS */
-
+/* floor-navigator.css — reset de interferencias del viewer */
 #fn-root * {
   box-sizing: border-box !important;
   opacity: 1 !important;
   visibility: visible !important;
-  filter: none !important;
-}
-#fn-root button {
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  outline: none !important;
 }
