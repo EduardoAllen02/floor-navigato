@@ -90,7 +90,7 @@
 
     /* ── Separador con espacio ── */
     var sep = document.createElement('div');
-    sep.style.setProperty('height', '14px', 'important');
+    sep.style.setProperty('height', '8px', 'important');
     root.appendChild(sep);
 
     /* ── Botones de piso ── */
