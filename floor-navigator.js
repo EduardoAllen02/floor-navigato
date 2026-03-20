@@ -155,7 +155,7 @@
     ls.setProperty('color',       '#ffffff',                        'important');
     ls.setProperty('font-weight', '700',                            'important');
     ls.setProperty('font-family', 'sans-serif',                     'important');
-    ls.setProperty('font-size',   sz.labelH + 'px',                 'important');
+    ls.setProperty('font-size',   sz.labelH/2 + 'px',                 'important');
     ls.setProperty('line-height', '1',                              'important');
     ls.setProperty('white-space', 'nowrap',                         'important');
     ls.setProperty('text-shadow', '0 1px 4px rgba(0,0,0,0.7)',     'important');
