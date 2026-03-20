@@ -3,9 +3,8 @@
   /* ─── CONFIGURACIÓN ───────────────────────────────────── */
   var BASE      = 'https://TUDOMINIO.com/';          // ← URL base de los tours
   var HOME_URL  = 'https://TU-LANDING.com/';         // ← URL del landing
-  var IMG_BASE  = 'https://eduardoallen02.github.io/floor-navigato/pngs/'; // ← donde están los PNGs
-  var IS_MOBILE = window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-  var OFFSET_Y  = IS_MOBILE ? '0px' : '-180px'; // desktop sube para evadir mapa 3D
+  var IMG_BASE  = 'https://eduardoallen02.github.io/floor-navigato/pngs/'; // ← GitHub Pages
+  var TOP_POS   = '30%';   // ← posición vertical: 50% = centro exacto, 30% = ~20% arriba del centro
   /* ──────────────────────────────────────────────────────── */
 
   var FLOORS = [
@@ -68,7 +67,7 @@
     root.id = 'fn-root';
     var rs = root.style;
     rs.setProperty('position',        'fixed',            'important');
-    rs.setProperty('top',             'calc(50% + ' + OFFSET_Y + ')', 'important');
+    rs.setProperty('top',             TOP_POS,            'important');
     rs.setProperty('left',            '8px',              'important');
     rs.setProperty('transform',       'translateY(-50%)', 'important');
     rs.setProperty('display',         'flex',             'important');
