@@ -3,7 +3,7 @@
   /* ─── CONFIGURACIÓN ───────────────────────────────────── */
   var BASE      = 'https://TUDOMINIO.com/';          // ← URL base de los tours
   var HOME_URL  = 'https://TU-LANDING.com/';         // ← URL del landing
-  var IMG_BASE  = 'https://eduardoallen02.github.io/floor-navigato/pngs'; // ← donde están los PNGs
+  var IMG_BASE  = 'https://cdn.jsdelivr.net/gh/EduardoAllen02/floor-navigato@main/pngs'; // PNGs via jsDelivr (CORS OK)
   var IS_MOBILE = window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
   var OFFSET_Y  = IS_MOBILE ? '0px' : '-180px'; // desktop sube para evadir mapa 3D
   /* ──────────────────────────────────────────────────────── */
