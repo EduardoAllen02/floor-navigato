@@ -4,7 +4,7 @@
   var BASE      = 'https://TUDOMINIO.com/';          // ← URL base de los tours
   var HOME_URL  = 'https://TU-LANDING.com/';         // ← URL del landing
   var IMG_BASE  = 'https://eduardoallen02.github.io/floor-navigato/pngs/'; // ← GitHub Pages
-  var TOP_POS   = '20%';   // ← posición vertical: 50% = centro exacto, 30% = ~20% arriba del centro
+  var TOP_POS   = '40%';   // ← posición vertical: 50% = centro exacto
   /* ──────────────────────────────────────────────────────── */
 
   var FLOORS = [
