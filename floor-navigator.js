@@ -104,7 +104,7 @@
       '#fn-root img.fn-active {' +
         'cursor:default!important;' +
         'transform:scale(1)!important;' +
-        'filter:brightness('+b+') drop-shadow(0 0 6px rgba(0,185,230,0.9)) drop-shadow(0 0 14px rgba(0,185,230,0.5))!important;' +
+        'filter:brightness('+b+') drop-shadow(0 0 6px rgba(27,145,255,0.9)) drop-shadow(0 0 14px rgba(27,145,255,0.5))!important;' +
       '}';
     doc.head.appendChild(s);
   }
