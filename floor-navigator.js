@@ -9,9 +9,9 @@
   // Desktop: la barra de habitaciones va a la derecha → podemos empezar desde arriba
   var NAV_TOP_DESKTOP  = 2;   // % del viewport
   // Mobile: la barra de habitaciones se pone arriba → dejamos espacio
-  var NAV_TOP_MOBILE   = 14;  // % del viewport
+  var NAV_TOP_MOBILE   = 12;  // % del viewport
   // Bottom igual para ambos: antes del minimapa 3D
-  var NAV_BOTTOM_VH    = 68;
+  var NAV_BOTTOM_VH    = 65;
 
   var LEFT_PX          = 8;
   var MOBILE_BREAKPOINT = 768; // px de ancho para considerar mobile
@@ -155,7 +155,7 @@
     ls.setProperty('color',       '#ffffff',                        'important');
     ls.setProperty('font-weight', '700',                            'important');
     ls.setProperty('font-family', 'sans-serif',                     'important');
-    ls.setProperty('font-size',   sz.labelH/2 + 'px',                 'important');
+    ls.setProperty('font-size',   sz.labelH*0.7 + 'px',                 'important');
     ls.setProperty('line-height', '1',                              'important');
     ls.setProperty('white-space', 'nowrap',                         'important');
     ls.setProperty('text-shadow', '0 1px 4px rgba(0,0,0,0.7)',     'important');
