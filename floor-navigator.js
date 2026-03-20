@@ -105,7 +105,7 @@
         'cursor:default!important;' +
         'filter:brightness('+b+')!important;' +
         'transform:scale(1)!important;' +
-        'box-shadow:0 0 10px 4px rgba(27,145,255,0.55), 0 0 22px 8px rgba(27,145,255,0.25)!important;' +
+        'box-shadow:0 0 10px 0px rgba(27,145,255,0.55), 0 0 22px 8px rgba(27,145,255,0.25)!important;' +
         'border-radius:12px!important;' +
       '}';
     doc.head.appendChild(s);
