@@ -6,25 +6,22 @@
   var IMG_BASE         = 'https://eduardoallen02.github.io/floor-navigato/pngs/';
   var BRIGHTNESS_HOVER = 1.3;
 
-  // Desktop: la barra de habitaciones va a la derecha → podemos empezar desde arriba
-  var NAV_TOP_DESKTOP  = 2;   // % del viewport
-  // Mobile: la barra de habitaciones se pone arriba → dejamos espacio
-  var NAV_TOP_MOBILE   = 12;  // % del viewport
-  // Bottom igual para ambos: antes del minimapa 3D
+  var NAV_TOP_DESKTOP  = 2;
+  var NAV_TOP_MOBILE   = 12;
   var NAV_BOTTOM_VH    = 65;
 
-  var LEFT_PX          = 8;
-  var MOBILE_BREAKPOINT = 768; // px de ancho para considerar mobile
+  var LEFT_PX           = 8;
+  var MOBILE_BREAKPOINT = 768;
   /* ──────────────────────────────────────────────────────── */
 
   var FLOOR_NAMES = {
-    'GF': 'Ground Floor',
-    '1F': 'First Floor',
-    '2F': 'Second Floor',
-    '3F': 'Third Floor',
-    '4F': 'Fourth Floor',
-    '5F': 'Fifth Floor',
-    '6F': 'Sixth Floor'
+    'GF': 'SAP Milan - Ground Floor',
+    '1F': 'SAP Milan - First Floor',
+    '2F': 'SAP Milan - Second Floor',
+    '3F': 'SAP Milan - Third Floor',
+    '4F': 'SAP Milan - Fourth Floor',
+    '5F': 'SAP Milan - Fifth Floor',
+    '6F': 'SAP Milan - Sixth Floor'
   };
 
   var FLOORS = [
@@ -37,11 +34,10 @@
     { l: 'GF', p: 'sap0', img: 'GF_Q.png' }
   ];
 
-  // Items: 1 label + 1 home + 1 sep + 7 floors
-  var LABEL_RATIO = 0.55; // altura del label relativa al botón
+  var LABEL_RATIO = 0.55;
   var SEP_RATIO   = 0.05;
   var GAP_RATIO   = 0.1;
-  var ITEM_COUNT  = FLOORS.length + 1; // home + 7 pisos
+  var ITEM_COUNT  = FLOORS.length + 1;
 
   function isMobile(winW) {
     return winW <= MOBILE_BREAKPOINT ||
@@ -49,27 +45,19 @@
   }
 
   function getWin() {
-    try {
-      return { w: window.top.innerWidth, h: window.top.innerHeight };
-    } catch(e) {
-      return { w: window.innerWidth, h: window.innerHeight };
-    }
+    try { return { w: window.top.innerWidth, h: window.top.innerHeight }; }
+    catch(e) { return { w: window.innerWidth, h: window.innerHeight }; }
   }
 
   function calcSizes(winH, topVH) {
     var availPx = winH * (NAV_BOTTOM_VH - topVH) / 100;
-    // availPx = labelH + gap + ITEM_COUNT * size + (ITEM_COUNT - 1) * gap + sepH
-    // labelH = LABEL_RATIO * size
-    // gap    = GAP_RATIO * size
-    // sepH   = SEP_RATIO * size
-    // availPx = size * (LABEL_RATIO + GAP_RATIO + ITEM_COUNT + (ITEM_COUNT-1)*GAP_RATIO + SEP_RATIO)
     var divisor = LABEL_RATIO + GAP_RATIO + ITEM_COUNT + (ITEM_COUNT - 1) * GAP_RATIO + SEP_RATIO;
     var size    = Math.floor(availPx / divisor);
     var gap     = Math.round(size * GAP_RATIO);
     var sepH    = Math.round(size * SEP_RATIO);
     var labelH  = Math.round(size * LABEL_RATIO);
-    size  = Math.max(22, Math.min(64, size));
-    gap   = Math.max(2,  Math.min(10, gap));
+    size   = Math.max(22, Math.min(64, size));
+    gap    = Math.max(2,  Math.min(10, gap));
     labelH = Math.max(14, Math.min(36, labelH));
     return { size: size, gap: gap, sepH: sepH, labelH: labelH };
   }
@@ -96,6 +84,7 @@
         '-webkit-user-drag:none!important;' +
         'box-sizing:border-box!important;' +
         'flex-shrink:0!important;' +
+        'pointer-events:auto!important;' +
       '}' +
       '#fn-root img:hover {' +
         'transform:scale(1.05)!important;' +
@@ -104,7 +93,7 @@
       '#fn-root img.fn-active {' +
         'cursor:default!important;' +
         'transform:scale(1)!important;' +
-        'filter:brightness('+b+') drop-shadow(0 0 6px rgba(27,145,255,0.9)) drop-shadow(0 0 14px rgba(27,145,255,0.5))!important;' +
+        'filter:brightness('+b+') drop-shadow(0 0 6px rgba(0,185,230,0.9)) drop-shadow(0 0 14px rgba(0,185,230,0.5))!important;' +
       '}';
     doc.head.appendChild(s);
   }
@@ -115,7 +104,7 @@
   }
 
   function setup(cfg) {
-    var cur = cfg.getAttribute('data-floor') || 'GF';
+    var cur       = cfg.getAttribute('data-floor') || 'GF';
     var floorName = FLOOR_NAMES[cur] || cur;
 
     var targetDoc, targetBody;
@@ -136,36 +125,35 @@
     var root = document.createElement('div');
     root.id  = 'fn-root';
     var rs   = root.style;
-    rs.setProperty('position',       'fixed',           'important');
-    rs.setProperty('top',            topVH + 'vh',      'important');
-    rs.setProperty('left',           LEFT_PX + 'px',    'important');
-    rs.setProperty('display',        'flex',            'important');
-    rs.setProperty('flex-direction', 'column',          'important');
-    rs.setProperty('align-items',    'flex-start',      'important');
-    rs.setProperty('gap',            sz.gap + 'px',     'important');
-    rs.setProperty('z-index',        '2147483647',      'important');
-    rs.setProperty('pointer-events', 'auto',            'important');
+    rs.setProperty('position',       'fixed',        'important');
+    rs.setProperty('top',            topVH + 'vh',   'important');
+    rs.setProperty('left',           LEFT_PX + 'px', 'important');
+    rs.setProperty('display',        'flex',         'important');
+    rs.setProperty('flex-direction', 'column',       'important');
+    rs.setProperty('align-items',    'flex-start',   'important');
+    rs.setProperty('gap',            sz.gap + 'px',  'important');
+    rs.setProperty('z-index',        '2147483647',   'important');
+    rs.setProperty('pointer-events', 'auto',         'important');
 
     /* ── Label nombre del piso ── */
     var label = document.createElement('div');
     label.textContent = floorName;
     var ls = label.style;
-    ls.setProperty('color',       '#ffffff',                        'important');
-    ls.setProperty('font-weight', '700',                            'important');
-    ls.setProperty('font-family', 'sans-serif',                     'important');
-    ls.setProperty('font-size',   sz.labelH*0.7 + 'px',                 'important');
-    ls.setProperty('line-height', '1',                              'important');
-    ls.setProperty('white-space', 'nowrap',                         'important');
-    ls.setProperty('text-shadow', '0 1px 4px rgba(0,0,0,0.7)',     'important');
-    ls.setProperty('pointer-events', 'none',                        'important');
-    ls.setProperty('padding-left', '4px',                           'important');
+    ls.setProperty('color',           '#ffffff',                    'important');
+    ls.setProperty('font-weight',     '700',                        'important');
+    ls.setProperty('font-family',     'sans-serif',                 'important');
+    ls.setProperty('font-size',       sz.labelH * 0.7 + 'px',      'important');
+    ls.setProperty('line-height',     '1',                          'important');
+    ls.setProperty('white-space',     'nowrap',                     'important');
+    ls.setProperty('text-shadow',     '0 1px 4px rgba(0,0,0,0.7)', 'important');
+    ls.setProperty('pointer-events',  'none',                       'important');
+    ls.setProperty('padding-left',    '4px',                        'important');
     root.appendChild(label);
 
-    /* ── Home ── */
+    /* ── Home (sin title para evitar popup) ── */
     var homeImg = document.createElement('img');
-    homeImg.src   = IMG_BASE + 'Home.png';
-    homeImg.alt   = 'Home';
-    homeImg.title = 'Inicio';
+    homeImg.src = IMG_BASE + 'Home.png';
+    homeImg.alt = 'Home';
     applySize(homeImg, sz.size);
     homeImg.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -180,14 +168,13 @@
     sep.style.setProperty('flex-shrink', '0',            'important');
     root.appendChild(sep);
 
-    /* ── Pisos ── */
+    /* ── Pisos (sin title para evitar popup) ── */
     var allImgs = [homeImg];
     FLOORS.forEach(function (f) {
       var isActive = f.l === cur;
       var img = document.createElement('img');
-      img.src   = IMG_BASE + f.img;
-      img.alt   = f.l;
-      img.title = 'Piso ' + f.l;
+      img.src = IMG_BASE + f.img;
+      img.alt = f.l;
       applySize(img, sz.size);
       if (isActive) img.classList.add('fn-active');
       if (!isActive) {
@@ -208,13 +195,13 @@
     function onResize() {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(function () {
-        var nw     = getWin();
-        var nm     = isMobile(nw.w);
-        var ntop   = nm ? NAV_TOP_MOBILE : NAV_TOP_DESKTOP;
-        var ns     = calcSizes(nw.h, ntop);
+        var nw   = getWin();
+        var nm   = isMobile(nw.w);
+        var ntop = nm ? NAV_TOP_MOBILE : NAV_TOP_DESKTOP;
+        var ns   = calcSizes(nw.h, ntop);
         root.style.setProperty('top', ntop + 'vh', 'important');
         root.style.setProperty('gap', ns.gap + 'px', 'important');
-        label.style.setProperty('font-size', ns.labelH + 'px', 'important');
+        label.style.setProperty('font-size', ns.labelH * 0.7 + 'px', 'important');
         sep.style.setProperty('height', ns.sepH + 'px', 'important');
         allImgs.forEach(function (img) { applySize(img, ns.size); });
       }, 100);
