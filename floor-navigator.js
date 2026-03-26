@@ -12,7 +12,36 @@
 
   var LEFT_PX           = 8;
   var MOBILE_BREAKPOINT = 768;
-  /* ──────────────────────────────────────────────────────── */
+
+  /*
+   * ─── TOUR IDs (Interiors3D / rowi.one) ────────────────────────────────────
+   * Todos los IDs centralizados aquí. Si Interiors3D regenera un tour,
+   * solo actualiza el campo `tour` de la entrada correspondiente — ningún
+   * index.html de los dist necesita tocarse.
+   *
+   * El piso activo se lee desde data-floor del pin HTML en el backend de
+   * Interiors3D (único mecanismo fiable dentro del viewer):
+   *   <span id="fn-cfg" data-floor="3F" style="display:none"></span>
+   *
+   *   sap0 (GF) → Ia9teGNuMXei6WqP1rKIgw
+   *   sap1 (1F) → u16wb_b4P-S3qKWzk0agug
+   *   sap2 (2F) → vkDhnv90NXq7P15ebi316g
+   *   sap3 (3F) → psbalPABO22nlaPk2iL7wQ
+   *   sap4 (4F) → NZDBUCHUNDCWB45khkfk7w
+   *   sap5 (5F) → Kfg81D95N_uwbMZDm4P_aQ
+   *   sap6 (6F) → SsZAVZjTPJqFki4tohl1rQ
+   * ──────────────────────────────────────────────────────────────────────────
+   */
+  var FLOORS = [
+    { l: '6F', p: 'sap6', img: '6F_Q.png', tour: 'SsZAVZjTPJqFki4tohl1rQ' },
+    { l: '5F', p: 'sap5', img: '5F_Q.png', tour: 'Kfg81D95N_uwbMZDm4P_aQ' },
+    { l: '4F', p: 'sap4', img: '4F_Q.png', tour: 'NZDBUCHUNDCWB45khkfk7w' },
+    { l: '3F', p: 'sap3', img: '3F_Q.png', tour: 'psbalPABO22nlaPk2iL7wQ' },
+    { l: '2F', p: 'sap2', img: '2F_Q.png', tour: 'vkDhnv90NXq7P15ebi316g' },
+    { l: '1F', p: 'sap1', img: '1F_Q.png', tour: 'u16wb_b4P-S3qKWzk0agug' },
+    { l: 'GF', p: 'sap0', img: 'GF_Q.png', tour: 'Ia9teGNuMXei6WqP1rKIgw' }
+  ];
+  /* ──────────────────────────────────────────────────────────────────────── */
 
   var FLOOR_NAMES = {
     'GF': 'SAP Milan - Ground Floor',
@@ -23,16 +52,6 @@
     '5F': 'SAP Milan - Fifth Floor',
     '6F': 'SAP Milan - Sixth Floor'
   };
-
-  var FLOORS = [
-    { l: '6F', p: 'sap6', img: '6F_Q.png' },
-    { l: '5F', p: 'sap5', img: '5F_Q.png' },
-    { l: '4F', p: 'sap4', img: '4F_Q.png' },
-    { l: '3F', p: 'sap3', img: '3F_Q.png' },
-    { l: '2F', p: 'sap2', img: '2F_Q.png' },
-    { l: '1F', p: 'sap1', img: '1F_Q.png' },
-    { l: 'GF', p: 'sap0', img: 'GF_Q.png' }
-  ];
 
   var LABEL_RATIO = 0.55;
   var SEP_RATIO   = 0.05;
@@ -104,6 +123,9 @@
   }
 
   function setup(cfg) {
+    // Piso activo: leído de data-floor en el pin HTML del backend de Interiors3D.
+    // Es el único mecanismo fiable — el script corre dentro del viewer (cross-origin),
+    // por lo que window.top.location no es accesible.
     var cur       = cfg.getAttribute('data-floor') || 'GF';
     var floorName = FLOOR_NAMES[cur] || cur;
 
@@ -150,7 +172,7 @@
     ls.setProperty('padding-left',    '4px',                        'important');
     root.appendChild(label);
 
-    /* ── Home (sin title para evitar popup) ── */
+    /* ── Home ── */
     var homeImg = document.createElement('img');
     homeImg.src = IMG_BASE + 'Home.png';
     homeImg.alt = 'Home';
@@ -161,14 +183,14 @@
     });
     root.appendChild(homeImg);
 
-    /* ── divisors ── */
+    /* ── Separator ── */
     var sep = document.createElement('div');
     sep.style.setProperty('height',      sz.sepH + 'px', 'important');
     sep.style.setProperty('width',       '1px',          'important');
     sep.style.setProperty('flex-shrink', '0',            'important');
     root.appendChild(sep);
 
-    /* ── Floors── */
+    /* ── Floors ── */
     var allImgs = [homeImg];
     FLOORS.forEach(function (f) {
       var isActive = f.l === cur;
