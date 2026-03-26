@@ -1,6 +1,6 @@
 !function () {
 
-  /* ─── CONFIGURACIÓN ───────────────────────────────────── */
+  /* ─── CONFIG ───────────────────────────────────── */
   var BASE             = 'https://TUDOMINIO.com/';
   var HOME_URL         = 'https://TU-LANDING.com/';
   var IMG_BASE         = 'https://eduardoallen02.github.io/floor-navigato/pngs/';
@@ -121,7 +121,7 @@
 
     injectStyles(targetDoc, BRIGHTNESS_HOVER);
 
-    /* ── Contenedor raíz ── */
+    /* ── root ── */
     var root = document.createElement('div');
     root.id  = 'fn-root';
     var rs   = root.style;
@@ -161,14 +161,14 @@
     });
     root.appendChild(homeImg);
 
-    /* ── Separador ── */
+    /* ── divisors ── */
     var sep = document.createElement('div');
     sep.style.setProperty('height',      sz.sepH + 'px', 'important');
     sep.style.setProperty('width',       '1px',          'important');
     sep.style.setProperty('flex-shrink', '0',            'important');
     root.appendChild(sep);
 
-    /* ── Pisos (sin title para evitar popup) ── */
+    /* ── Floors── */
     var allImgs = [homeImg];
     FLOORS.forEach(function (f) {
       var isActive = f.l === cur;
