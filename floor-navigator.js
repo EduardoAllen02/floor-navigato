@@ -15,12 +15,14 @@
 
   /*
    * ─── TOUR IDs (Interiors3D / rowi.one) ────────────────────────────────────
-   * Todos los IDs centralizados aquí. Si Interiors3D regenera un tour,
-   * solo actualiza el campo `tour` de la entrada correspondiente — ningún
-   * index.html de los dist necesita tocarse.
-   *
-   * El piso activo se lee desde data-floor del pin HTML en el backend de
-   * Interiors3D (único mecanismo fiable dentro del viewer):
+* All IDs are centralized here. If Interiors3D regenerates a tour,
+
+it only updates the `tour` field of the corresponding entry—no
+
+index.html of the dist files needs to be touched.
+
+* The active floor is read from the data-floor HTML pin in the Interiors3D backend
+(the only reliable mechanism within the viewer):
    *   <span id="fn-cfg" data-floor="3F" style="display:none"></span>
    *
    *   sap0 (GF) → Ia9teGNuMXei6WqP1rKIgw
@@ -202,7 +204,7 @@
       if (!isActive) {
         img.addEventListener('click', function (e) {
           e.stopPropagation();
-          go(BASE.replace(/\/$/, '') + '/' + f.p);
+          go(BASE.replace(/\/$/, '') + '/' + f.p + '/?tour=' + f.tour);
         });
       }
       root.appendChild(img);
