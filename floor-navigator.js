@@ -25,7 +25,7 @@
 
   /* ─── FLOOR LINKS ──────────────────────────────────────────────────────────
    * One URL per floor. Update these when the hosting URLs change.
-   * The current floor is detected from data-floor in the embedded HTML pin.
+   * The current floor is detected from data-floor
    * ──────────────────────────────────────────────────────────────────────── */
   var FLOORS = [
     { l: '6F', url: 'https://DOMINIO.com/sap6/', img: '6F_Q.png' },
