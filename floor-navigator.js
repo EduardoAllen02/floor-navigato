@@ -2,7 +2,7 @@
 
   /* ─── CONFIG ───────────────────────────────────── */
   var HOME_URL         = 'https://TU-LANDING.com/';
-  var IMG_BASE         = 'buttons/';
+  var IMG_BASE         = 'https://eduardoallen02.github.io/floor-navigato/buttons/';
   var BRIGHTNESS_HOVER = 1.3;
 
   var NAV_TOP_DESKTOP  = 2;
